@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Authentication;
+using todoAPI.Model;
 
 [ApiController]
 [Route("[controller]")]
@@ -29,6 +30,7 @@ public class AuthController : ControllerBase
 
     private string GenerateJwtToken()
     {
+        var userId = "123";
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes("this is my custom Secret key for authentication");
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -36,7 +38,8 @@ public class AuthController : ControllerBase
             Subject = new ClaimsIdentity(new Claim[]
             {
                 new Claim(ClaimTypes.Name, "usuario"),
-                new Claim(ClaimTypes.Role, "admin") // Você pode adicionar mais roles se necessário
+                new Claim(ClaimTypes.Role, "admin") ,
+                new Claim("id", userId)
             }),
             Expires = DateTime.UtcNow.AddHours(1), // Tempo de expiração do token
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using todoAPI.Model;
-
-
+using System.IdentityModel.Tokens.Jwt;
+using todoAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -41,6 +41,8 @@ if (builder.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TodoApi v1"));
 }
 
+
+app.UseMiddleware<JwtMiddleware>("this is my custom Secret key for authentication");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

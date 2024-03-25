@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using todoAPI.Model;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Authentication;
+using System.Security.Claims;
 
 namespace todoAPI.Controller
 {
@@ -23,14 +27,15 @@ namespace todoAPI.Controller
 
         // GET: api/Items
         [HttpGet]
-        [Authorize]
+    //    [Authorize]
         public async Task<ActionResult<IEnumerable<Item>>> GetTodoItems()
         {
-          if (_context.TodoItems == null)
+            var user = HttpContext.Items["User"] as User;
+            var name = user.Id;
+            if (_context.TodoItems == null)
           {
               return NotFound();
           }
-            
 
             if (!User.Identity?.IsAuthenticated ?? false)
             {
